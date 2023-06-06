@@ -234,7 +234,17 @@ class OpenIDConnect extends PluggableAuth {
 					', Issuer: ' . $this->issuer
 				);
 
-				$this->setSessionSecret( self::OIDC_ACCESSTOKEN_SESSION_KEY, (array)$oidc->getAccessTokenPayload() );
+				try {
+					$this->setSessionSecret(
+						self::OIDC_ACCESSTOKEN_SESSION_KEY,
+						(array)$oidc->getAccessTokenPayload()
+					);
+				} catch ( \Throwable $_th ) {
+					$this->setSessionSecret(
+						self::OIDC_ACCESSTOKEN_SESSION_KEY,
+						$oidc->introspectToken( $oidc->getAccessToken() )
+					);
+				}
 				$this->setSessionSecret( self::OIDC_IDTOKEN_SESSION_KEY, $oidc->getIdToken() );
 				$this->setSessionSecret( self::OIDC_IDTOKENPAYLOAD_SESSION_KEY, (array)$oidc->getIdTokenPayload() );
 				$this->setSessionSecret( self::OIDC_REFRESHTOKEN_SESSION_KEY, $oidc->getRefreshToken() );
@@ -442,7 +452,11 @@ class OpenIDConnect extends PluggableAuth {
 			if ( isset( $json->refresh_token ) ) {
 				$this->setSessionSecret( self::OIDC_REFRESHTOKEN_SESSION_KEY, $json->refresh_token );
 			}
-			$accessToken = (array)$client->getAccessTokenPayload();
+			try {
+				$accessToken = (array)$client->getAccessTokenPayload();
+			} catch ( \Throwable $_th ) {
+				$accessToken = (array)$client->introspectToken( $client->getAccessToken() );
+			}
 			$this->setSessionSecret( self::OIDC_ACCESSTOKEN_SESSION_KEY, $accessToken );
 			return $accessToken;
 		}
