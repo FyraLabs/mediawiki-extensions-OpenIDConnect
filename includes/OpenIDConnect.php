@@ -195,9 +195,7 @@ class OpenIDConnect extends PluggableAuth {
 			} else {
 				$scopes = [ 'openid', 'profile', 'email' ];
 			}
-			foreach ( $scopes as $scope ) {
-				$oidc->addScope( $scope );
-			}
+			$oidc->addScope( $scopes );
 
 			if ( $this->getData()->has( 'proxy' ) ) {
 				$oidc->setHttpProxy( $this->getData()->get( 'proxy' ) );
