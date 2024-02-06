@@ -1,6 +1,6 @@
 {
 	"name": "OpenID Connect",
-	"version": "7.0-dev",
+	"version": "7.0.2",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]"
 	],
@@ -51,9 +51,6 @@
 		},
 		"OpenIDConnect_UseEmailNameAsUserName": {
 			"value": false
-		},
-		"OpenIDConnect_GroupAttributes": {
-			"value": []
 		}
 	},
 	"attributes": {
